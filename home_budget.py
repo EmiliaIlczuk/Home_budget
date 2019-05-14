@@ -88,8 +88,8 @@ class DBConect:
                 self.insert()
             elif (dec == "U"):
                 self.delete()
-            #elif(dec == "S"):
-                #self.summary()
+            elif(dec == "S"):
+                self.summary()
             elif dec == "Q":
                 exit()
             else:
@@ -234,3 +234,13 @@ class DBConect:
                 else:
                     self.conn.rollback()
                     print("Nie usunięto.")
+
+    def summary(self):
+        self.kursor.execute\
+        ("SELECT w.rok, w.miesiac, ifnull(p.suma_przychodow,0) AS przychody, ifnull(w.suma_wydatkow,0) AS wydatki, ((ifnull(p.suma_przychodow,0))-(ifnull(w.suma_wydatkow,0))) AS roznica FROM wydatki_mies AS w LEFT JOIN przychody_mies AS p ON w.rok = p.rok AND w.miesiac = p.miesiac GROUP BY w.rok, w.miesiac ORDER BY w.rok DESC, w.miesiac DESC;")
+        result = self.kursor.fetchall()
+        print(" | rok  | |miesiąc| | przychody | |  wydatki  | |  róźnica  | ")
+        i = 1
+        for row in result:
+            print(" | %4s | | %5s | | %9.2f | | %9.2f | | %9.2f | " % (row[0], row[1], row[2], row[3], row[4]))
+            i = i + 1
