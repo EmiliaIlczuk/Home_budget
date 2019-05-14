@@ -16,7 +16,7 @@
         <entry file="file://$PROJECT_DIR$/home_budget.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="529">
-              <caret line="171" column="4" selection-start-line="171" selection-start-column="4" selection-end-line="171" selection-end-column="4" />
+              <caret line="207" lean-forward="true" selection-start-line="207" selection-end-line="207" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
               </folding>
@@ -125,7 +125,7 @@
     <entry file="file://$PROJECT_DIR$/home_budget.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="529">
-          <caret line="171" column="4" selection-start-line="171" selection-start-column="4" selection-end-line="171" selection-end-column="4" />
+          <caret line="207" lean-forward="true" selection-start-line="207" selection-end-line="207" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
           </folding>

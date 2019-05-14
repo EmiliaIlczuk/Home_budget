@@ -84,8 +84,8 @@ class DBConect:
             dec = input("Wybierz opcję: \nP - pokaż, \nW - wprowadź, \nU - usuń, \nS - szybkie podsumowanie, \nQ - wyjście").upper()
             if dec == "P":
                 self.select()
-            #elif (dec == "W"):
-                #self.insert()
+            elif (dec == "W"):
+                self.insert()
             #elif (dec == "U"):
                 #self.delete()
             #elif(dec == "S"):
@@ -169,4 +169,39 @@ class DBConect:
                     print("Brak danych do wyświetlenia.")
                 else:
                     print("Przychody w wybranym miesiącu: %7.2f zł" % result[0])
-    
+    def insert(self):
+        tabela = input("Wprowadź: \nW - wydatki, \nP - przychody").upper()
+        data = input("Wprowadź datę transakcji w formacje rrrr-mm-dd")
+        kwota = input("Wprowadź kwotę")
+
+        if tabela == "W":
+            kategoria = input(
+                "Wprowadź jedną z poniższych kategorii:\nŻywność, \nMieszkanie, \nPłatności, \nAuto i transport, \nZdrowie, \nHigiena, \nOdzież i obuwie, \nRozrywka, \nEdukacja, \nSpłata długów, \nInne").capitalize()
+            opis = input("Wprowadź opis transkacji / miejsce zakupu")
+        if tabela == "P":
+            kategoria = input("Wprowadź jedną z poniższych kategorii:\nWynagrodzenie, \nPremia, \nInne").capitalize()
+
+        kto = input("Wprowadź osobę przeprowadzającą transakcję")
+        komentarz = input("Wprowadź komantarz")
+
+        if tabela == "W":
+            try:
+                self.kursor.execute\
+                ("INSERT INTO wydatki (data, kwota, kategoria, opis, kto, komentarz) VALUES (%s, %s, %s, %s, %s, %s)",\
+                (data, kwota, kategoria, opis, kto, komentarz))
+                self.conn.commit()
+                print('Wprowadzono poprawnie.')
+            except pymysql.MySQLError:
+                print("Niepoprawne dane. Spróbuj ponownie.")
+                self.insert()
+
+        if tabela == "P":
+            try:
+                self.kursor.execute\
+                ("INSERT INTO przychody (data, kwota, kategoria, kto, komentarz) VALUES (%s, %s, %s, %s, %s)",\
+                (data, kwota, kategoria, kto, komentarz))
+                self.conn.commit()
+                print('Wprowadzono poprawnie.')
+            except pymysql.MySQLError:
+                print("Niepoprawne dane. Spróbuj ponownie.")
+                self.insert()
