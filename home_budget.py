@@ -79,3 +79,94 @@ class DBConect:
             self.conn.commit()
             self.log()
 
+    def menu(self):
+        while(True):
+            dec = input("Wybierz opcję: \nP - pokaż, \nW - wprowadź, \nU - usuń, \nS - szybkie podsumowanie, \nQ - wyjście").upper()
+            if dec == "P":
+                self.select()
+            #elif (dec == "W"):
+                #self.insert()
+            #elif (dec == "U"):
+                #self.delete()
+            #elif(dec == "S"):
+                #self.summary()
+            elif dec == "Q":
+                exit()
+            else:
+                print("Błędny wybór.")
+
+    def select(self):
+        tabela = input("Pokaż: \nW - wydatki, \nP - przychody").upper()
+        miesiac = int(input("Wpisz miesiąc:"))
+        rok = int(input("Wpisz rok:"))
+        widok = input("Pokaż widok: \nP - pełny, \nS - skrócony, \nSUM - tylko sumę").upper()
+
+        if tabela == "W":
+            if widok == "P":
+                self.kursor.execute\
+                ("SELECT * FROM wydatki WHERE month(data)=%s and year(data)=%s;", (miesiac, rok))
+                result = self.kursor.fetchall()
+                if self.kursor.rowcount == 0:
+                    print("Brak danych do wyświetlenia.")
+                else:
+                    i = 1
+                    for row in result:
+                        print(" | %4s | | %10s | | %7.2f | | %20s | | %15s | | %5s | | %30s |" % (row[0], row[1], row[2], row[3], row[4], row[5], row[6]))
+                        i = i + 1
+
+            if widok == "S":
+                self.kursor.execute\
+                ("SELECT kategoria, round(sum(kwota),2) FROM wydatki WHERE month(data)=%s and year(data)=%s GROUP BY kategoria;", (miesiac, rok))
+                result = self.kursor.fetchall()
+                if self.kursor.rowcount == 0:
+                    print("Brak danych do wyświetlenia.")
+                else:
+                    i = 1
+                    for row in result:
+                        print(" | %20s | | %10s |" % (row[0], row[1]))
+                        i = i + 1
+
+            if widok == "SUM":
+                self.kursor.execute\
+                ("SELECT round(sum(kwota),2) FROM wydatki WHERE month(data)=%s and year(data)=%s;", (miesiac, rok))
+                result = self.kursor.fetchall()
+                if self.kursor.rowcount == 0:
+                    print("Brak danych do wyświetlenia.")
+                else:
+                    print("Wydatki w wybranym miesiącu: %7.2f zł" % result[0])
+
+        if tabela == "P":
+            if widok == "P":
+                self.kursor.execute\
+                ("SELECT * FROM przychody WHERE month(data)=%s and year(data)=%s;", (miesiac, rok))
+                result = self.kursor.fetchall()
+                if self.kursor.rowcount == 0:
+                    print("Brak danych do wyświetlenia.")
+                else:
+                    i = 1
+                    for row in result:
+                        print("| %4s | | %10s | | %7.2f | | %15s | | %5s | | %30s |" % (row[0], row[1], row[2], row[3], row[4], row[5]))
+                        i = i + 1
+
+            if widok == "S":
+                self.kursor.execute\
+                ("SELECT kategoria, round(sum(kwota),2) FROM przychody WHERE month(data)=%s and year(data)=%s GROUP BY kategoria;",
+                (miesiac, rok))
+                result = self.kursor.fetchall()
+                if self.kursor.rowcount == 0:
+                    print("Brak danych do wyświetlenia.")
+                else:
+                    i = 1
+                    for row in result:
+                        print(" | %20s | | %10s |" % (row[0], row[1]))
+                        i = i + 1
+
+            if widok == "SUM":
+                self.kursor.execute\
+                ("SELECT round(sum(kwota),2) FROM przychody WHERE month(data)=%s and year(data)=%s;", (miesiac, rok))
+                result = self.kursor.fetchall()
+                if self.kursor.rowcount == 0:
+                    print("Brak danych do wyświetlenia.")
+                else:
+                    print("Przychody w wybranym miesiącu: %7.2f zł" % result[0])
+    
