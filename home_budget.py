@@ -38,3 +38,44 @@ class DBConect:
 
         except pymysql.MySQLError:
             print("Błędne dane połącznia")
+    def entry(self):
+        dec = input("Chcesz się zalogować czy utworzyć nowe konto? \nL - logowanie, \nN - nowy użytkownik, \nQ-wyjście").upper()
+        if dec == "L":
+            self.log()
+        elif dec == "N":
+            self.reg()
+        elif dec == "Q":
+            exit()
+        else:
+            print("Błędny wybór.")
+            self.entry()
+
+    def log(self):
+        login = input('Podaj login')
+        haslo = input('Podaj hasło')
+
+        self.kursor = self.conn.cursor()
+        self.kursor.execute("SELECT * FROM logowanie WHERE login=%s and haslo=%s", (login, haslo))
+        results = self.kursor.fetchall()
+
+        if len(results) == 1:
+            print("Zalogowano poprawnie.")
+            self.menu()
+        else:
+            print("Niepoprawny login lub hasło. Spróbuj ponownie.")
+            self.log()
+
+    def reg(self):
+        login = input('Podaj login')
+        self.kursor = self.conn.cursor()
+        self.kursor.execute("SELECT login FROM logowanie WHERE login=%s", login)
+        if self.kursor.rowcount != 0:
+            print("Użytkownik", login, "już istnieje.")
+            self.entry()
+        else:
+            haslo = input('Podaj hasło')
+            self.kursor.execute("INSERT INTO logowanie (login, haslo) VALUES (%s, %s)", (login, haslo))
+            print("Utworzono nowego użytkownika: ", login)
+            self.conn.commit()
+            self.log()
+
