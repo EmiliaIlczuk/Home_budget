@@ -86,8 +86,8 @@ class DBConect:
                 self.select()
             elif (dec == "W"):
                 self.insert()
-            #elif (dec == "U"):
-                #self.delete()
+            elif (dec == "U"):
+                self.delete()
             #elif(dec == "S"):
                 #self.summary()
             elif dec == "Q":
@@ -205,3 +205,32 @@ class DBConect:
             except pymysql.MySQLError:
                 print("Niepoprawne dane. Spróbuj ponownie.")
                 self.insert()
+    def delete(self):
+        tabela = input("Usuń: \nW - wydatki, \nP - przychody").upper()
+        ID = int(input("Wprowadź ID transakcji"))
+
+        if tabela == "W":
+            self.kursor.execute("DELETE FROM wydatki WHERE id=%s", ID)
+            if self.kursor.rowcount == 0:
+                print("Nie ma transakcji o takim ID.")
+            else:
+                dec = input("Czy na pewno usunąć? T/N").upper()
+                if (dec == "T"):
+                    self.conn.commit()
+                    print("Usunięto poprawnie.")
+                else:
+                    self.conn.rollback()
+                    print("Nie usunięto.")
+
+        if tabela == "P":
+            self.kursor.execute("DELETE FROM przychody WHERE id=%s", ID)
+            if self.kursor.rowcount == 0:
+                print("Nie ma transakcji o takim ID.")
+            else:
+                dec = input("Czy na pewno usunąć? T/N").upper()
+                if (dec == "T"):
+                    self.conn.commit()
+                    print("Usunięto poprawnie.")
+                else:
+                    self.conn.rollback()
+                    print("Nie usunięto.")
